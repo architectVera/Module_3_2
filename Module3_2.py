@@ -38,8 +38,12 @@ class ShoppingCart():
 
     def add_to_cart(self, product: Product, quantity: int):
         """Adds  a product to the cart and adds the quantity to the quantity_cart."""
-        self.cart.append(product)
-        self.quantity_cart.append(quantity)
+        if product in self.cart:
+            index_product = self.cart.index(product)
+            self.quantity_cart[index_product] += quantity
+        else:
+            self.cart.append(product)
+            self.quantity_cart.append(quantity)
 
 
     def calc_total(self):
@@ -56,23 +60,10 @@ class ShoppingCart():
         joined_cart = ShoppingCart()
         joined_cart.cart += self.cart
         joined_cart.quantity_cart += self.quantity_cart
-        for p in other.cart:
-            if p in joined_cart.cart:
-                index_other = other.cart.index(p)
-                index_joined_cart = joined_cart.cart.index(p)
-                joined_cart.quantity_cart[index_joined_cart] += other.quantity_cart[index_other]
-            else:
-                index_other = other.cart.index(p)
-                joined_cart.cart.append(p)
-                joined_cart.quantity_cart.append(other.quantity_cart[index_other])
-        return joined_cart
 
-
-
-
-
-
-
+        for product, quantity in zip(other.cart, other.quantity_cart):
+            joined_cart.add_to_cart(product, quantity)
+            return joined_cart
 
 
 apple = Product("apple", 30)
@@ -82,7 +73,8 @@ cart_1 = ShoppingCart()
 cart_2 = ShoppingCart()
 
 cart_2.add_to_cart(orange, 2)
-
+#
+cart_1.add_to_cart(orange, 4)
 cart_1.add_to_cart(orange, 4)
 cart_1.add_to_cart(apple, 2)
 
@@ -91,4 +83,3 @@ print(our_cart.quantity_cart)
 for p in our_cart.cart:
     print(p.name)
 print(our_cart.calc_total())
-
