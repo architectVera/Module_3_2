@@ -10,7 +10,7 @@ class Product:
         self.price = price
 
     def calc_product_total(self, quantity):
-        return float(self.price*quantity)
+        return round(float(self.price*quantity), 2)
 
     def __eq__(self, other):
         if not isinstance(other, Product):
@@ -81,7 +81,7 @@ class ShoppingCart():
         joined_cart = ShoppingCart()
         joined_cart.cart += self.cart
         joined_cart.quantity_cart += self.quantity_cart
-        if not isinstance(other, ShoppingCart):
+        if not isinstance(other, (Product, ShoppingCart)):
             raise RuntimeError("You can only add to instances of the class ShoppingCart")
         for product, quantity in zip(other.cart, other.quantity_cart):
             joined_cart.add_to_cart(product, quantity)
