@@ -83,9 +83,14 @@ class ShoppingCart():
         joined_cart.quantity_cart += self.quantity_cart
         if not isinstance(other, (Product, ShoppingCart)):
             raise RuntimeError("You can only add to instances of the class ShoppingCart")
-        for product, quantity in zip(other.cart, other.quantity_cart):
-            joined_cart.add_to_cart(product, quantity)
-            return joined_cart
+
+        if isinstance(other, ShoppingCart):
+            for product, quantity in zip(other.cart, other.quantity_cart):
+                joined_cart.add_to_cart(product, quantity)
+        if isinstance(other, Product):
+            joined_cart.add_to_cart(other,1)
+
+        return joined_cart
 
 
 apple = Product("apple", 30)
